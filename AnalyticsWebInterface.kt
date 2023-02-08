@@ -12,7 +12,6 @@ class AnalyticsWebInterface(context: Context?) {
     private val mAnalytics: FirebaseAnalytics
     @JavascriptInterface
     fun logEvent(name: String, jsonParams: String) {
-        LOGD("logEvent:$name")
         mAnalytics.logEvent(name, bundleFromJson(jsonParams))
     }
 
@@ -40,15 +39,16 @@ class AnalyticsWebInterface(context: Context?) {
         }
     }
 
-    private fun arrayListFromJsonArray(json: String): ArrayList<String> {
+    private fun arrayListFromJsonArray(json: String): Bundle {
         val jsonArray = JSONArray(json)
         val arrayList:ArrayList<String> = ArrayList()
+        val bundle:Bundle = Bundle()
 
         for(i in 0 until jsonArray.length()){
-            arrayList.add(jsonArray[i].toString())
+            bundle.putAll(bundleFromJson(jsonArray[i].toString()))
         }
 
-        return arrayList
+        return bundle
     }
 
     private fun bundleFromJson(json: String): Bundle {
@@ -67,7 +67,7 @@ class AnalyticsWebInterface(context: Context?) {
                 "Float" -> bundle.putFloat(key, value as Float)
                 "Double" -> bundle.putDouble(key, value as Double)
                 "JSONObject" -> bundle.putBundle(key, bundleFromJson(value.toString()) as Bundle)
-                "JSONArray" -> bundle.putStringArrayList(key, arrayListFromJsonArray(value.toString()) as ArrayList<String>)
+                "JSONArray" -> bundle.putBundle(key, arrayListFromJsonArray(value.toString()) as Bundle)
                 else -> bundle.putString(key, value::class.simpleName)
             }
         }
@@ -80,6 +80,6 @@ class AnalyticsWebInterface(context: Context?) {
 
     init {
         mAnalytics = FirebaseAnalytics.getInstance(context!!)
-        
+
     }
 }
