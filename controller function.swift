@@ -18,6 +18,12 @@ func userContentController(_ userContentController: WKUserContentController,
           } else if command == "logEvent" {
               guard let name = body["name"] as? String else { return }
               guard let params = body["parameters"] as? [String: NSObject] else { return }
-            Analytics.logEvent(name, parameters: params)
+              let containsKey = params.keys.contains {$0.contains("gtm.")}
+                if containsKey {
+                    return
+                }
+                else{
+                    Analytics.logEvent(name, parameters: params)
+                }
           }
         }
