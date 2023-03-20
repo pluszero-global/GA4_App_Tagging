@@ -1,5 +1,3 @@
-package com.pluszero.liveinsight
-
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +10,9 @@ class AnalyticsWebInterface(context: Context?) {
     private val mAnalytics: FirebaseAnalytics
     @JavascriptInterface
     fun logEvent(name: String, jsonParams: String) {
-        mAnalytics.logEvent(name, bundleFromJson(jsonParams))
+        if(!jsonParams.contains("gtm.")) {
+            mAnalytics.logEvent(name, bundleFromJson(jsonParams))
+        }
     }
 
     @JavascriptInterface
