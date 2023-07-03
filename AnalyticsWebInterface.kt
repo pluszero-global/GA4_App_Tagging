@@ -1,3 +1,5 @@
+package com.pluszero.liveinsight
+
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -61,7 +63,7 @@ class AnalyticsWebInterface(context: Context?) {
             val value: Any = jsonObject.get(key)
             when (value::class.simpleName) {
                 "String" -> bundle.putString(key, value as String)
-                "Integer" -> bundle.putInt(key, value as Int)
+                "Int" -> bundle.putInt(key, value as Int)
                 "Long" -> bundle.putLong(key, value as Long)
                 "Boolean" -> bundle.putBoolean(key, value as Boolean)
                 "Float" -> bundle.putFloat(key, value as Float)
